@@ -1,0 +1,39 @@
+version: '2.2'
+
+services:
+  server:
+    container_name: potd-server
+    restart: always
+    image: potd-server
+    environment:
+      - DATABASE_URL=mongodb://groc-db:27017/autogroc
+    build:
+      context: server
+      dockerfile: dockerfile
+    volumes:
+      - ./server:/server/
+    ports:
+      - 8080:8080
+    networks:
+      - shared-network
+
+  client:
+    container_name: potd-client
+    restart: unless-stopped
+    image: potd-client
+    build:
+      context: client
+      dockerfile: dockerfile
+    volumes:
+      - ./client:/client/
+    ports:
+      - 3000:3000
+    networks:
+      - shared-network
+    depends_on:
+      - server
+    links:
+      - server:se
+
+networks:
+  shared-network:
