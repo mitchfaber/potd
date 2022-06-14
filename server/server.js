@@ -9,7 +9,7 @@ const genRouter = require("./routes/GenRoute");
 app.use("/generation", genRouter);
 
 const potdRouter = require("./routes/PokeOfTheDayRoute");
-app.use("/", potdRouter);
+app.use("/spotlight", potdRouter);
 
 app.listen(8080, () => {
 	console.log("Server Started");
