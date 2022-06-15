@@ -1,12 +1,20 @@
 require("dotenv").config();
 const express = require("express");
+const axios = require("axios");
 const router = express.Router();
+const mysql = require("mysql");
 const scheduler = require("node-schedule");
-let todaysMon;
+const NodeCache = require("node-cache");
+const myCache = new NodeCache();
 
-let mysql = require("mysql");
+let today;
 
-scheduler.scheduleJob("0 0 * * *", () => {});
+// --------- Scheduled task to create new random num, and pick new pokemon to cache at midnight
+scheduler.scheduleJob("0 0 * * *", () => {
+	randomNum().then((res) => {});
+});
+
+// ---------SQL CONNECTION
 let con = mysql.createConnection({
 	host: process.env.url,
 	user: process.env.username,
@@ -16,12 +24,6 @@ let con = mysql.createConnection({
 
 con.connect(function (err) {
 	if (err) throw err;
-	let today = new Date();
-	let dd = String(today.getDate()).padStart(2, "0");
-	let mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
-	let yyyy = today.getFullYear();
-	today = yyyy + "-" + mm + "-" + dd;
-	console.log(today);
 	let sql = "SELECT * FROM PokemonOfTheDay WHERE Date = ?";
 	con.query(sql, [today], (err, result) => {
 		if (err) throw err;
@@ -30,8 +32,39 @@ con.connect(function (err) {
 	console.log("Connected!");
 });
 
+// --------- ROUTES
 router.get("/", (req, res) => {
-	res.send("Pokemon of the day");
+	today = new Date();
+	let dd = String(today.getDate()).padStart(2, "0");
+	let mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+	let yyyy = today.getFullYear();
+	today = yyyy + "-" + mm + "-" + dd;
+
+	randomNum().then((result) => {
+		res.send(getSpotlightPoke(result));
+	});
+	// res.send("Pokemon of the day");
 });
+
+// functions
+async function randomNum() {
+	return Math.floor(Math.random() * 898) + 1;
+}
+
+function getSpotlightPoke(pokeID) {
+	today = "2022-06-13";
+	pokeSpotlight = myCache.get(today);
+	if (pokeSpotlight !== undefined) {
+		console.log("cache");
+		return pokeSpotlight;
+	} else {
+		axios.get(`https://pokeapi.co/api/v2/pokemon/${pokeID}`).then((res) => {
+			// console.log(res.data);
+			console.log("api");
+			myCache.set(today, res.data, 600);
+			return res.data;
+		});
+	}
+}
 
 module.exports = router;
