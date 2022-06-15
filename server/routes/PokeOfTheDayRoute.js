@@ -11,26 +11,28 @@ let today;
 
 // --------- Scheduled task to create new random num, and pick new pokemon to cache at midnight
 scheduler.scheduleJob("0 0 * * *", () => {
-	randomNum().then((res) => {});
+	randomNum().then((res) => {
+		console.log("Midnight run " + res);
+	});
 });
 
 // ---------SQL CONNECTION
-let con = mysql.createConnection({
-	host: process.env.url,
-	user: process.env.username,
-	password: process.env.password,
-	database: process.env.dbname,
-});
+// let con = mysql.createConnection({
+// 	host: process.env.url,
+// 	user: process.env.username,
+// 	password: process.env.password,
+// 	database: process.env.dbname,
+// });
 
-con.connect(function (err) {
-	if (err) throw err;
-	let sql = "SELECT * FROM PokemonOfTheDay WHERE Date = ?";
-	con.query(sql, [today], (err, result) => {
-		if (err) throw err;
-		todaysMon = result;
-	});
-	console.log("Connected!");
-});
+// con.connect(function (err) {
+// 	if (err) throw err;
+// 	let sql = "SELECT * FROM PokemonOfTheDay WHERE Date = ?";
+// 	con.query(sql, [today], (err, result) => {
+// 		if (err) throw err;
+// 		todaysMon = result;
+// 	});
+// 	console.log("Connected!");
+// });
 
 // --------- ROUTES
 router.get("/", (req, res) => {
@@ -41,9 +43,28 @@ router.get("/", (req, res) => {
 	today = yyyy + "-" + mm + "-" + dd;
 
 	randomNum().then((result) => {
-		res.send(getSpotlightPoke(result));
+		today = "2022-06-13";
+		pokeSpotlight = myCache.get(today);
+
+		if (pokeSpotlight !== undefined) {
+			console.log("cache");
+			res.send(pokeSpotlight);
+		} else {
+			axios
+				.get(`https://pokeapi.co/api/v2/pokemon/${result}`)
+				.then((res) => {
+					console.log("api");
+					if (myCache.set(today, res.data, 600)) {
+						// console.log(myCache.get(today));
+						pokeSpotlight = myCache.get(today);
+					}
+				})
+				.then(() => {
+					console.log("axios then");
+					res.send(pokeSpotlight);
+				});
+		}
 	});
-	// res.send("Pokemon of the day");
 });
 
 // functions
@@ -51,20 +72,8 @@ async function randomNum() {
 	return Math.floor(Math.random() * 898) + 1;
 }
 
-function getSpotlightPoke(pokeID) {
-	today = "2022-06-13";
-	pokeSpotlight = myCache.get(today);
-	if (pokeSpotlight !== undefined) {
-		console.log("cache");
-		return pokeSpotlight;
-	} else {
-		axios.get(`https://pokeapi.co/api/v2/pokemon/${pokeID}`).then((res) => {
-			// console.log(res.data);
-			console.log("api");
-			myCache.set(today, res.data, 600);
-			return res.data;
-		});
-	}
+async function getSpotlightPoke(pokeID) {
+	console.log(pokeID);
 }
 
 module.exports = router;
