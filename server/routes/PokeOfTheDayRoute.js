@@ -1,9 +1,10 @@
+const errorLogger = require("./../errorLogger");
 require("dotenv").config();
 const express = require("express");
 const axios = require("axios");
 const router = express.Router();
 const mysql = require("mysql");
-const scheduler = require("node-schedule");
+// const scheduler = require("node-schedule");
 const NodeCache = require("node-cache");
 const e = require("express");
 const myCache = new NodeCache();
@@ -11,10 +12,12 @@ const myCache = new NodeCache();
 // --------- ROUTES
 router.get("/", (req, res) => {
 	let today = new Date();
+	console.log(today);
 	let dd = String(today.getDate()).padStart(2, "0");
 	let mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
 	let yyyy = today.getFullYear();
 	today = yyyy + "-" + mm + "-" + dd;
+	console.log(today);
 
 	getPotdSql(today).then((result) => {
 		console.log(result.length);
@@ -53,7 +56,29 @@ router.get("/", (req, res) => {
 	});
 });
 
-router.get("/:date", (req, res) => {});
+router.get("/:date", (req, res) => {
+	let prevSpotlightDate = req.params.date;
+	getPotdSql(prevSpotlightDate).then((result) => {
+		console.log(result.length);
+		if (result.length === 0) {
+			console.log("no sql record found");
+			res.send("No pokemon found...");
+		} else {
+			getCache(prevSpotlightDate).then((cacheRes) => {
+				console.log(cacheRes);
+				if (cacheRes !== undefined) {
+					console.log("cache");
+					res.send(cacheRes);
+				} else {
+					console.log("api");
+					getFromAPI(result[0].PokedexNum, prevSpotlightDate).then((result) => {
+						res.send(result);
+					});
+				}
+			});
+		}
+	});
+});
 
 // functions
 async function randomNum() {
@@ -92,10 +117,10 @@ async function getPotdSql(today) {
 	});
 	return new Promise((resolve) => {
 		con.connect(function (err) {
-			if (err) logError(err);
+			if (err) errorLogger.logError(err);
 			let sql = "SELECT * FROM PokemonOfTheDay WHERE Date = ?";
 			con.query(sql, [today], (err, result) => {
-				if (err) logError(err);
+				if (err) errorLogger.logError(err);
 				resolve(result);
 			});
 		});
@@ -111,18 +136,11 @@ async function setPotdSql(pokeName, pokeID, today) {
 	});
 
 	await con.connect(function (err) {
-		if (err) logError(err);
+		if (err) errorLogger.logError(err);
 		let sql = "INSERT INTO PokemonOfTheDay (PokemonName, PokedexNum, Date) VALUES (?,?,?)";
 		con.query(sql, [pokeName, pokeID, today], (err, result) => {
-			if (err) logError(err);
+			if (err) errorLogger.logError(err);
 		});
-	});
-}
-
-function logError(err) {
-	const fs = require("fs");
-	fs.writeFile("/Logs/error.log", err, (error) => {
-		if (error) console.log(error);
 	});
 }
 
