@@ -10,7 +10,7 @@ const e = require("express");
 const myCache = new NodeCache();
 
 // --------- ROUTES
-router.get("/", (req, res) => {
+router.get("/spotlight", (req, res) => {
 	let today = new Date();
 	console.log(today);
 	let dd = String(today.getDate()).padStart(2, "0");
@@ -56,7 +56,7 @@ router.get("/", (req, res) => {
 	});
 });
 
-router.get("/:date", (req, res) => {
+router.get("/spotlight/:date", (req, res) => {
 	let prevSpotlightDate = req.params.date;
 	getPotdSql(prevSpotlightDate).then((result) => {
 		console.log(result.length);
@@ -77,6 +77,13 @@ router.get("/:date", (req, res) => {
 				}
 			});
 		}
+	});
+});
+
+router.get("/all", (req, res) => {
+	getAllPotd().then((result) => {
+		console.log(result);
+		res.send(result);
 	});
 });
 
@@ -105,6 +112,25 @@ function writeCache(data, today) {
 async function getCache(today) {
 	return new Promise((resolve) => {
 		resolve(myCache.get(today));
+	});
+}
+
+async function getAllPotd() {
+	let con = mysql.createConnection({
+		host: process.env.url,
+		user: process.env.username,
+		password: process.env.password,
+		database: process.env.dbname,
+	});
+	return new Promise((resolve) => {
+		con.connect(function (err) {
+			if (err) errorLogger.logError(err);
+			let sql = "SELECT * FROM PokemonOfTheDay ORDER BY Date";
+			con.query(sql, (err, result) => {
+				if (err) errorLogger.logError(err);
+				resolve(result);
+			});
+		});
 	});
 }
 
