@@ -6,7 +6,6 @@ const router = express.Router();
 const mysql = require("mysql");
 // const scheduler = require("node-schedule");
 const NodeCache = require("node-cache");
-const e = require("express");
 const myCache = new NodeCache();
 
 // --------- ROUTES
@@ -124,12 +123,28 @@ async function getAllPotd() {
 	});
 	return new Promise((resolve) => {
 		con.connect(function (err) {
-			if (err) errorLogger.logError(err);
+			if (err) {
+				handleDisconnect();
+				errorLogger.logError(err);
+			}
 			let sql = "SELECT * FROM PokemonOfTheDay ORDER BY Date";
 			con.query(sql, (err, result) => {
-				if (err) errorLogger.logError(err);
+				if (err) {
+					handleDisconnect();
+					errorLogger.logError(err);
+				}
 				resolve(result);
 			});
+		});
+		con.on("error", function (err) {
+			console.log("db error", err);
+			errorLogger.logError(err);
+			if (err.code === "PROTOCOL_CONNECTION_LOST") {
+				// Connection to the MySQL server is usually lost due to either server restart
+				handleDisconnect();
+			} else {
+				throw err;
+			}
 		});
 	});
 }
@@ -143,12 +158,29 @@ async function getPotdSql(today) {
 	});
 	return new Promise((resolve) => {
 		con.connect(function (err) {
-			if (err) errorLogger.logError(err);
+			if (err) {
+				handleDisconnect();
+				errorLogger.logError(err);
+			}
 			let sql = "SELECT * FROM PokemonOfTheDay WHERE Date = ?";
 			con.query(sql, [today], (err, result) => {
-				if (err) errorLogger.logError(err);
+				if (err) {
+					handleDisconnect();
+					errorLogger.logError(err);
+				}
 				resolve(result);
 			});
+		});
+
+		con.on("error", function (err) {
+			console.log("db error", err);
+			errorLogger.logError(err);
+			if (err.code === "PROTOCOL_CONNECTION_LOST") {
+				// Connection to the MySQL server is usually lost due to either server restart
+				handleDisconnect();
+			} else {
+				throw err;
+			}
 		});
 	});
 }
@@ -162,11 +194,56 @@ async function setPotdSql(pokeName, pokeID, today) {
 	});
 
 	await con.connect(function (err) {
-		if (err) errorLogger.logError(err);
+		if (err) {
+			handleDisconnect();
+			errorLogger.logError(err);
+		}
 		let sql = "INSERT INTO PokemonOfTheDay (PokemonName, PokedexNum, Date) VALUES (?,?,?)";
 		con.query(sql, [pokeName, pokeID, today], (err, result) => {
-			if (err) errorLogger.logError(err);
+			if (err) {
+				handleDisconnect();
+				errorLogger.logError(err);
+			}
 		});
+	});
+
+	connection.on("error", function (err) {
+		console.log("db error", err);
+		errorLogger.logError(err);
+		if (err.code === "PROTOCOL_CONNECTION_LOST") {
+			// Connection to the MySQL server is usually lost due to either server restart
+			handleDisconnect();
+		} else {
+			throw err;
+		}
+	});
+}
+
+function handleDisconnect() {
+	con = mysql.createConnection({
+		host: process.env.url,
+		user: process.env.username,
+		password: process.env.password,
+		database: process.env.dbname,
+	});
+
+	con.connect(function (err) {
+		// The server is either down or restarting (takes a while sometimes).
+		if (err) {
+			console.log("error when connecting to db:", err);
+			// Introduce a delay before attempting to reconnect, to avoid a hot loop
+			setTimeout(handleDisconnect, 2000);
+		}
+	});
+	con.on("error", function (err) {
+		console.log("db error", err);
+		errorLogger.logError(err);
+		if (err.code === "PROTOCOL_CONNECTION_LOST") {
+			// Connection to the sql server is usually lost due to either server restart
+			handleDisconnect();
+		} else {
+			throw err;
+		}
 	});
 }
 
