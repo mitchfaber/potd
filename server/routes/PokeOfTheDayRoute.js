@@ -104,39 +104,6 @@ async function getCache(today) {
 	});
 }
 
-async function getAllPotd() {
-	let con = mysql.createConnection({
-		host: process.env.url,
-		user: process.env.username,
-		password: process.env.password,
-		database: process.env.dbname,
-	});
-	return new Promise((resolve) => {
-		con.connect(function (err) {
-			if (err) {
-				handleDisconnect();
-			}
-			let sql = "SELECT * FROM PokemonOfTheDay ORDER BY Date";
-			con.query(sql, (err, result) => {
-				if (err) {
-					handleDisconnect();
-				}
-				resolve(result);
-			});
-		});
-		con.on("error", function (err) {
-			console.log("db error", err);
-
-			if (err.code === "PROTOCOL_CONNECTION_LOST") {
-				// Connection to the MySQL server is usually lost due to either server restart
-				handleDisconnect();
-			} else {
-				throw err;
-			}
-		});
-	});
-}
-
 async function getPotdSql(today) {
 	let con = mysql.createConnection({
 		host: process.env.url,

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Pokemon from "./Pokemon";
-import PokemonList from "./PokemonList";
+import PokemonList from "./DatePicker";
 
 function App() {
 	const [loading, setLoading] = useState(true);
@@ -19,7 +19,9 @@ function App() {
 
 	function setSpotDate(newDate) {
 		console.log(newDate);
+		setLoading(true);
 		setSpotlightDate(newDate);
+		setLoading(false);
 	}
 
 	if (loading) {

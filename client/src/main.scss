@@ -1,33 +1,76 @@
 @import "./../node_modules/bootstrap/scss/bootstrap.scss";
 
+body {
+    background-color:#404040;
+    color:lightgrey;
+}
 
+.type{
+    display:inline-block;
+    border: 2em;
+    border-radius: 6em;
+    padding:0.5em;
+    text-align:center;
+    font-size: 1em;
+    width:25%;
+}
+.normal{
+    @extend .type;
+    background-color:darkgrey
+}
+.dark{
+    @extend .type;
+    background-color:grey;
+    color:white
+}
 .grass{
-    color:green;
+    display:inline-block;
+    border: 2em;
+    border-radius: 6em;
+    padding:0.5em;
+    text-align:center;
+    font-size: 1em;
+    // width:25%;
+    background-color:green;
 }
 .poison {
-    color:magenta
+    @extend .type;
+    background-color:magenta
 }
 .flying{
-    color:skyblue
+    @extend .type;
+    background-color:skyblue
 }
 .fire{
-    color:orangered;
+    @extend .type;
+    background-color:orangered;
 }
 .dragon{
-    color:purple
+    @extend .type;
+    background-color:purple;
+    color:white
 }
 .ice{
-    color:#C8E9E9
+    @extend .type;
+    background-color:#C8E9E9;
 }
 .ghost{
-    color:blueviolet
+    @extend .type;
+    background-color:blueviolet;
 }
 .water{
-    color:aqua
+    @extend .type;
+    background-color:aqua;
 }
 .bug {
-    color:greenyellow
+    @extend .type;
+    background-color:greenyellow;
 }
 .rock{
-    color:#694605
+    @extend .type;
+    background-color:#694605;
+}
+.electric{
+    @extend .type;
+    background-color:yellow;
 }
