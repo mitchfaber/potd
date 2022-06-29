@@ -1,18 +1,13 @@
 import React, { useState, useEffect } from "react";
 
-export default function PokemonList({ setSpotDate, today }) {
-	const [curPokemon, setCurPokemon] = useState();
-	const [loading, setLoading] = useState(false);
-
-	// useEffect(() => {
-	// 	setSpotDate(today);
-	// }, []);
+export default function DatePicker({ setSpotDate, today, loading }) {
 	return (
 		<div>
 			<input
 				type="date"
 				min="2022-06-13"
 				max={today}
+				disabled={loading}
 				onInput={(e) => {
 					setSpotDate(e.target.value);
 				}}></input>
