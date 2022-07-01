@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Pokemon from "./Pokemon";
-import PokemonList from "./DatePicker";
+import DatePicker from "./DatePicker";
 
 function App() {
 	const [loading, setLoading] = useState(true);
@@ -29,8 +29,8 @@ function App() {
 	} else {
 		return (
 			<div className="container">
+				<DatePicker setSpotDate={setSpotDate} today={today}></DatePicker>
 				<Pokemon spotlightDate={spotlightDate} today={today}></Pokemon>
-				<PokemonList setSpotDate={setSpotDate} today={today}></PokemonList>
 			</div>
 		);
 	}
