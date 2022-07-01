@@ -16,7 +16,6 @@ router.get("/spotlight", (req, res) => {
 	today = yyyy + "-" + mm + "-" + dd;
 
 	getPotdSql(today).then((result) => {
-		console.log(result.length);
 		if (result.length === 0) {
 			console.log("no sql record found");
 			// No record in SQL for today, get random num and write to sql.
@@ -37,7 +36,6 @@ router.get("/spotlight", (req, res) => {
 			});
 		} else {
 			getCache(today).then((cacheRes) => {
-				console.log(cacheRes);
 				if (cacheRes !== undefined) {
 					console.log("cache");
 					res.send(cacheRes);
@@ -89,13 +87,11 @@ router.get("spotlight/dateLimits", (req, res) => {
 router.get("/spotlight/:date", (req, res) => {
 	let prevSpotlightDate = req.params.date;
 	getPotdSql(prevSpotlightDate).then((result) => {
-		console.log(result.length);
 		if (result.length === 0) {
 			console.log("no sql record found");
 			res.send({ message: "No pokemon found..." });
 		} else {
 			getCache(prevSpotlightDate).then((cacheRes) => {
-				console.log(cacheRes);
 				if (cacheRes !== undefined) {
 					console.log("cache");
 					res.send(cacheRes);

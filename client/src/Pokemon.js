@@ -6,13 +6,11 @@ export default function Pokemon({ spotlightDate, today }) {
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
-		console.log(today);
 		setLoading(true);
 		if (spotlightDate === today) {
 			fetch(`http://localhost:8080/spotlight/`)
 				.then((res) => res.json())
 				.then((result) => {
-					console.log(result);
 					setPokemon(result);
 					setLoading(false);
 				});
@@ -20,7 +18,6 @@ export default function Pokemon({ spotlightDate, today }) {
 			fetch(`http://localhost:8080/spotlight/${spotlightDate}`)
 				.then((res) => res.json())
 				.then((result) => {
-					console.log(result);
 					setPokemon(result);
 					setLoading(false);
 				});
@@ -34,7 +31,6 @@ export default function Pokemon({ spotlightDate, today }) {
 	if (loading) {
 		return <div>Loading...</div>;
 	} else {
-		console.log(pokemon.message);
 		if (pokemon.message !== undefined) {
 			return <div>No Pokemon found...</div>;
 		} else {
