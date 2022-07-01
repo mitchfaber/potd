@@ -18,7 +18,6 @@ function App() {
 	}, []);
 
 	function setSpotDate(newDate) {
-		console.log(newDate);
 		setLoading(true);
 		setSpotlightDate(newDate);
 		setLoading(false);
@@ -28,7 +27,7 @@ function App() {
 		return <div>Loading...</div>;
 	} else {
 		return (
-			<div className="container">
+			<div className="container mt-2">
 				<DatePicker setSpotDate={setSpotDate} today={today}></DatePicker>
 				<Pokemon spotlightDate={spotlightDate} today={today}></Pokemon>
 			</div>
