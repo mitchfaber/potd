@@ -52,13 +52,47 @@ router.get("/spotlight", (req, res) => {
 	});
 });
 
+router.get("spotlight/dateLimits", (req, res) => {
+	let con = mysql.createConnection({
+		host: process.env.url,
+		user: process.env.username,
+		password: process.env.password,
+		database: process.env.dbname,
+	});
+	return new Promise((resolve) => {
+		con.connect(function (err) {
+			if (err) {
+				handleDisconnect();
+			}
+			let sql = "SELECT MAX(Date),Min(DATE) FROM PokemonOfTheDay";
+			con.query(sql, [today], (err, result) => {
+				if (err) {
+					handleDisconnect();
+				}
+				resolve(result);
+			});
+		});
+
+		con.on("error", function (err) {
+			console.log("db error", err);
+
+			if (err.code === "PROTOCOL_CONNECTION_LOST") {
+				// Connection to the MySQL server is usually lost due to either server restart
+				handleDisconnect();
+			} else {
+				throw err;
+			}
+		});
+	});
+});
+
 router.get("/spotlight/:date", (req, res) => {
 	let prevSpotlightDate = req.params.date;
 	getPotdSql(prevSpotlightDate).then((result) => {
 		console.log(result.length);
 		if (result.length === 0) {
 			console.log("no sql record found");
-			res.send("No pokemon found...");
+			res.send({ message: "No pokemon found..." });
 		} else {
 			getCache(prevSpotlightDate).then((cacheRes) => {
 				console.log(cacheRes);

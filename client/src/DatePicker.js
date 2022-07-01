@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 
-export default function DatePicker({ setSpotDate, today, loading }) {
+export default function DatePicker({ setSpotDate, today }) {
 	return (
-		<div>
+		<div className="row justify-content-center">
 			<input
 				type="date"
 				min="2022-06-13"
+				className="col-6 col-sm-4 col-md-2"
 				max={today}
-				disabled={loading}
 				onInput={(e) => {
 					setSpotDate(e.target.value);
 				}}></input>

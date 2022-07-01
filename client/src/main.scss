@@ -12,7 +12,7 @@ body {
     padding:0.5em;
     text-align:center;
     font-size: 1em;
-    width:25%;
+    width:70px;
 }
 .normal{
     @extend .type;
@@ -24,22 +24,16 @@ body {
     color:white
 }
 .grass{
-    display:inline-block;
-    border: 2em;
-    border-radius: 6em;
-    padding:0.5em;
-    text-align:center;
-    font-size: 1em;
-    // width:25%;
+    @extend .type;
     background-color:green;
 }
 .poison {
     @extend .type;
-    background-color:magenta
+    background-color:magenta;
 }
 .flying{
     @extend .type;
-    background-color:skyblue
+    background-color:skyblue;
 }
 .fire{
     @extend .type;
