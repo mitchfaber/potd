@@ -34,28 +34,37 @@ export default function Pokemon({ spotlightDate, today }) {
 	if (loading) {
 		return <div>Loading...</div>;
 	} else {
-		return (
-			<div className="container">
-				<div className="row mt-3 align-items-center justify-content-center">
-					<div className="alert alert-dark justify-content-center">
-						<h1>{capitalize(pokemon.name)}</h1>
+		console.log(pokemon.message);
+		if (pokemon.message !== undefined) {
+			return <div>No Pokemon found...</div>;
+		} else {
+			return (
+				<div className="row justify-content-center">
+					<div className="alert alert-dark col-10 col-md-6 mt-3">
+						<div className="row">
+							<h1>{capitalize(pokemon.name)}</h1>
+						</div>
 						<hr />
-						<div className="card-text">
+						<div className="row justify-content-start">
 							{pokemon.types.map((element) => {
 								return (
-									<span key={uuidv4()} className={element.type.name}>
-										{capitalize(element.type.name)}
-									</span>
+									<div className="col-4 col-sm-2 pb-2">
+										<span key={uuidv4()} className={element.type.name}>
+											{capitalize(element.type.name)}
+										</span>
+									</div>
 								);
 							})}
 						</div>
-						<img
-							src={`${pokemon.sprites.other["official-artwork"].front_default}`}
-							className="img-fluid"
-							alt={pokemon.name}></img>
+						<div className="row justify-content-center align-items-center">
+							<img
+								src={`${pokemon.sprites.other["official-artwork"].front_default}`}
+								className="img-fluid"
+								alt={pokemon.name}></img>
+						</div>
 					</div>
 				</div>
-			</div>
-		);
+			);
+		}
 	}
 }
