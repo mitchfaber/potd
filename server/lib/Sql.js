@@ -12,13 +12,19 @@ module.exports.getPotdSql = async function getPotdSql(today) {
 			if (err) {
 				handleDisconnect();
 			}
-			let sql = "SELECT * FROM PokemonOfTheDay WHERE Date = ?";
+			let sql = `SELECT * FROM PokemonOfTheDay WHERE Date = ?`;
 			con.query(sql, [today], (err, result) => {
+				console.log(sql + today);
 				if (err) {
 					handleDisconnect();
 				}
 				resolve(result);
 			});
+		});
+
+		con.on("connect", function (err) {
+			if (err) console.log(err);
+			console.log("Db connected");
 		});
 
 		con.on("error", function (err) {
