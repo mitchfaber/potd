@@ -15,20 +15,24 @@ router.get("/spotlight", (req, res) => {
 	today = yyyy + "-" + mm + "-" + dd;
 
 	sqlUtil.getPotdSql(today).then((result) => {
-		if (result.length === 0) {
+		if (result === undefined) {
 			res.send({ message: "No Pokemon found..." });
 		} else {
-			getCache(today).then((cacheRes) => {
-				if (cacheRes !== undefined) {
-					console.log("cache");
-					res.send(cacheRes);
-				} else {
-					console.log("api");
-					getFromAPI(result[0].PokedexNum, today).then((result) => {
-						res.send(result);
-					});
-				}
-			});
+			if (result.length === 0) {
+				res.send({ message: "No Pokemon found..." });
+			} else {
+				getCache(today).then((cacheRes) => {
+					if (cacheRes !== undefined) {
+						console.log("cache");
+						res.send(cacheRes);
+					} else {
+						console.log("api");
+						getFromAPI(result[0].PokedexNum, today).then((result) => {
+							res.send(result);
+						});
+					}
+				});
+			}
 		}
 	});
 });

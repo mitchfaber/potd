@@ -10,6 +10,8 @@ const myCache = new NodeCache();
 const scheduler = require("node-schedule");
 const rule = new scheduler.RecurrenceRule();
 rule.hour = 0;
+rule.minute = 0;
+rule.second = 0;
 rule.tz = "America/Halifax";
 
 let today = new Date();

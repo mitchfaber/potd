@@ -28,7 +28,7 @@ function App() {
 	} else {
 		return (
 			<div className="container mt-2">
-				<DatePicker setSpotDate={setSpotDate} today={today}></DatePicker>
+				<DatePicker setSpotDate={setSpotDate}></DatePicker>
 				<Pokemon spotlightDate={spotlightDate} today={today}></Pokemon>
 			</div>
 		);
