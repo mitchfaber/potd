@@ -68,6 +68,13 @@ router.get("/spotlight/:date", (req, res) => {
 // functions
 function getFromAPI(pokeID, today) {
 	return new Promise((resolve) => {
+		axios.get(`https://pokeapi.co/api/v2/pokemon-species/${pokeID}`).then((res) => {
+			res.data.flavor_text_entries.map((e) => {
+				if (e.language.name === "en") {
+					console.log(e);
+				}
+			});
+		});
 		axios.get(`https://pokeapi.co/api/v2/pokemon/${pokeID}`).then((res) => {
 			writeCache(res.data, today).then((result) => {
 				resolve(result);
