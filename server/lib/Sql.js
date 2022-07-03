@@ -14,7 +14,6 @@ module.exports.getPotdSql = async function getPotdSql(today) {
 			}
 			let sql = `SELECT * FROM PokemonOfTheDay WHERE Date = ?`;
 			con.query(sql, [today], (err, result) => {
-				console.log(sql + today);
 				if (err) {
 					handleDisconnect();
 				}
