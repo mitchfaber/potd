@@ -16,12 +16,12 @@ export default function DatePicker({ setSpotDate }) {
 	}, []);
 
 	useEffect(() => {
-		console.log(minDate);
-		console.log(maxDate);
 		setLoading(false);
 	}, [minDate, maxDate]);
 
-	if (!loading) {
+	if (loading) {
+		return <div>Loading...</div>;
+	} else {
 		return (
 			<div className="row justify-content-center">
 				<input

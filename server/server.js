@@ -31,7 +31,7 @@ app.listen(8080, () => {
 		randomNum().then((result) => {
 			getFromAPI(result, today).then((e) => {
 				sqlUtil.setPotdSql(e.name, e.id, today);
-				console.log(e);
+				console.log("Midnight");
 			});
 		});
 	});

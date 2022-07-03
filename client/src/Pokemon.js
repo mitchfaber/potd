@@ -44,10 +44,8 @@ export default function Pokemon({ spotlightDate, today }) {
 						<div className="row justify-content-start">
 							{pokemon.types.map((element) => {
 								return (
-									<div className="col-4 col-sm-2 pb-2">
-										<span key={uuidv4()} className={element.type.name}>
-											{capitalize(element.type.name)}
-										</span>
+									<div key={uuidv4()} className="col-4 col-sm-2 pb-2">
+										<span className={element.type.name}>{capitalize(element.type.name)}</span>
 									</div>
 								);
 							})}
