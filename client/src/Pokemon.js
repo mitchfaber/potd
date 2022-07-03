@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
+import SpeciesInfo from "./SpeciesInfo";
 
 export default function Pokemon({ spotlightDate, today }) {
 	const [pokemon, setPokemon] = useState();
@@ -55,6 +56,10 @@ export default function Pokemon({ spotlightDate, today }) {
 								src={`${pokemon.sprites.other["official-artwork"].front_default}`}
 								className="img-fluid"
 								alt={pokemon.name}></img>
+						</div>
+						<hr />
+						<div className="row justify-content-start">
+							<SpeciesInfo />
 						</div>
 					</div>
 				</div>
