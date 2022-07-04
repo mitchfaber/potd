@@ -12,6 +12,7 @@ const rule = new scheduler.RecurrenceRule();
 rule.hour = 0;
 rule.minute = 0;
 rule.second = 0;
+//make timezone halifax - might change this to be montreal eventually..
 rule.tz = "America/Halifax";
 
 let today = new Date();
@@ -28,8 +29,10 @@ app.use("/", potdRouter);
 
 app.listen(8080, () => {
 	const job = scheduler.scheduleJob(rule, function () {
+		//run at midnight every day
 		randomNum().then((result) => {
 			getFromAPI(result, today).then((e) => {
+				//get new pokemon from the api, and write it to my SQL server and write a cache.
 				sqlUtil.setPotdSql(e.name, e.id, today);
 				console.log("Midnight");
 			});
@@ -49,6 +52,7 @@ function writeCache(data, today) {
 function getFromAPI(pokeID, today) {
 	return new Promise((resolve) => {
 		axios.get(`https://pokeapi.co/api/v2/pokemon/${pokeID}`).then((res) => {
+			//write cache to avoid hitting the api more than necessary. Get from cache is in the router.
 			writeCache(res.data, today).then((result) => {
 				resolve(result);
 			});

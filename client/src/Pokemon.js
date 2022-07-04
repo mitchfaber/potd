@@ -30,7 +30,7 @@ export default function Pokemon({ spotlightDate, today }) {
 				<div className="row justify-content-center">
 					<div className="alert alert-dark col-10 col-md-6 mt-3">
 						<div className="row">
-							<h1>{capitalize(pokemon.general.name)}</h1>
+							<h2>{capitalize(pokemon.general.name)}</h2>
 						</div>
 						<hr />
 						<div className="row justify-content-start">
