@@ -1,10 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { v4 as uuidv4 } from "uuid";
 
 export default function FlavorText({ pokemon, capitalize }) {
-	useEffect(() => {
-		console.log(pokemon);
-	}, []);
 	return (
 		<table className="table">
 			<tbody>
