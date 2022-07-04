@@ -68,3 +68,15 @@ body {
     @extend .type;
     background-color:yellow;
 }
+.steel{
+    @extend .type;
+    background-color: #71797E;
+}
+.psychic{
+    @extend .type;
+    background-color: darkviolet;
+}
+.fairy{
+    @extend .type;
+    background-color: pink;
+}
