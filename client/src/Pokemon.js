@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
-import SpeciesInfo from "./SpeciesInfo";
+import FlavorText from "./FlavorText";
 
 export default function Pokemon({ spotlightDate, today }) {
 	const [pokemon, setPokemon] = useState();
@@ -8,21 +8,12 @@ export default function Pokemon({ spotlightDate, today }) {
 
 	useEffect(() => {
 		setLoading(true);
-		if (spotlightDate === today) {
-			fetch(`http://localhost:8080/spotlight/`)
-				.then((res) => res.json())
-				.then((result) => {
-					setPokemon(result);
-					setLoading(false);
-				});
-		} else {
-			fetch(`http://localhost:8080/spotlight/${spotlightDate}`)
-				.then((res) => res.json())
-				.then((result) => {
-					setPokemon(result);
-					setLoading(false);
-				});
-		}
+		fetch(`http://localhost:8080/spotlight/${spotlightDate}`)
+			.then((res) => res.json())
+			.then((result) => {
+				setPokemon(result);
+				setLoading(false);
+			});
 	}, [spotlightDate]);
 
 	function capitalize(inputToCap) {
@@ -39,11 +30,11 @@ export default function Pokemon({ spotlightDate, today }) {
 				<div className="row justify-content-center">
 					<div className="alert alert-dark col-10 col-md-6 mt-3">
 						<div className="row">
-							<h1>{capitalize(pokemon.name)}</h1>
+							<h1>{capitalize(pokemon.general.name)}</h1>
 						</div>
 						<hr />
 						<div className="row justify-content-start">
-							{pokemon.types.map((element) => {
+							{pokemon.general.types.map((element) => {
 								return (
 									<div key={uuidv4()} className="col-4 col-sm-2 pb-2">
 										<span className={element.type.name}>{capitalize(element.type.name)}</span>
@@ -53,13 +44,13 @@ export default function Pokemon({ spotlightDate, today }) {
 						</div>
 						<div className="row justify-content-center align-items-center">
 							<img
-								src={`${pokemon.sprites.other["official-artwork"].front_default}`}
+								src={`${pokemon.general.sprites.other["official-artwork"].front_default}`}
 								className="img-fluid"
-								alt={pokemon.name}></img>
+								alt={pokemon.general.name}></img>
 						</div>
 						<hr />
 						<div className="row justify-content-start">
-							<SpeciesInfo />
+							<FlavorText pokemon={pokemon} capitalize={capitalize} />
 						</div>
 					</div>
 				</div>

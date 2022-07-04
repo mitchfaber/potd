@@ -10,15 +10,12 @@ export default function DatePicker({ setSpotDate }) {
 		fetch(`http://localhost:8080/dateLimits/`)
 			.then((res) => res.json())
 			.then((result) => {
-				console.log(result[0]);
 				setMaxDate(formatDate(result[0].max));
 				setMinDate(formatDate(result[0].min));
 			});
 	}, []);
 
 	useEffect(() => {
-		console.log(minDate);
-		console.log(maxDate);
 		setLoading(false);
 	}, [minDate, maxDate]);
 
