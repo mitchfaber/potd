@@ -28,8 +28,6 @@ module.exports.getPotdSql = async function getPotdSql(today) {
 		});
 
 		con.on("error", function (err) {
-			console.log("db error", err);
-
 			if (err.code === "PROTOCOL_CONNECTION_LOST") {
 				// Connection to the MySQL server is usually lost due to either server restart
 				handleDisconnect();
@@ -62,7 +60,6 @@ module.exports.setPotdSql = async function setPotdSql(pokeName, pokeID, today) {
 	});
 
 	con.on("error", function (err) {
-		console.log("db error", err);
 		if (err.code === "PROTOCOL_CONNECTION_LOST") {
 			// Connection to the MySQL server is usually lost due to either server restart
 			handleDisconnect();
@@ -85,7 +82,7 @@ module.exports.getMinMaxDates = function getMinMaxDates() {
 			if (err) {
 				handleDisconnect();
 			}
-			let sql = "SELECT MAX(Date)  as max,Min(DATE) as min FROM PokemonOfTheDay";
+			let sql = "SELECT MAX(Date) as max,Min(DATE) as min FROM PokemonOfTheDay";
 			con.query(sql, (err, result) => {
 				if (err) {
 					handleDisconnect();
@@ -95,8 +92,6 @@ module.exports.getMinMaxDates = function getMinMaxDates() {
 		});
 
 		con.on("error", function (err) {
-			console.log("db error", err);
-
 			if (err.code === "PROTOCOL_CONNECTION_LOST") {
 				// Connection to the MySQL server is usually lost due to either server restart
 				handleDisconnect();
@@ -125,7 +120,6 @@ function handleDisconnect() {
 		}
 	});
 	con.on("error", function (err) {
-		console.log("db error", err);
 		if (err.code === "PROTOCOL_CONNECTION_LOST") {
 			// Connection to the sql server is usually lost due to either server restart
 			handleDisconnect();
