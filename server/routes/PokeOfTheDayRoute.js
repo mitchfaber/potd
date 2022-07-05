@@ -4,7 +4,7 @@ const axios = require("axios");
 const router = express.Router();
 const NodeCache = require("node-cache");
 const myCache = new NodeCache();
-const sqlUtil = require("./../library/sql");
+const sqlUtil = require("../library/sql");
 
 // --------- ROUTES
 router.get("/dateLimits", (req, res) => {

@@ -25,7 +25,7 @@ app.use(cors());
 app.use(express.json());
 
 const potdRouter = require("./routes/PokeOfTheDayRoute");
-app.use("/", potdRouter);
+app.use("/api/", potdRouter);
 
 app.listen(8080, () => {
 	const job = scheduler.scheduleJob(rule, function () {
