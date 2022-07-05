@@ -6,6 +6,7 @@ module.exports.getPotdSql = async function getPotdSql(today) {
 		user: process.env.username,
 		password: process.env.password,
 		database: process.env.dbname,
+		port: process.env.dbport,
 	});
 	return new Promise((resolve) => {
 		con.connect(function (err) {
@@ -43,6 +44,7 @@ module.exports.setPotdSql = async function setPotdSql(pokeName, pokeID, today) {
 		user: process.env.username,
 		password: process.env.password,
 		database: process.env.dbname,
+		port: process.env.dbport,
 	});
 
 	await con.connect(function (err) {
@@ -73,6 +75,7 @@ module.exports.getMinMaxDates = function getMinMaxDates() {
 		user: process.env.username,
 		password: process.env.password,
 		database: process.env.dbname,
+		port: process.env.dbport,
 	});
 	return new Promise((resolve) => {
 		con.connect(function (err) {
@@ -105,6 +108,7 @@ function handleDisconnect() {
 		user: process.env.username,
 		password: process.env.password,
 		database: process.env.dbname,
+		port: process.env.dbport,
 	});
 
 	con.connect(function (err) {
