@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const axios = require("axios");
-const sqlUtil = require("./lib/sql");
+const sqlUtil = require("./library/sql");
 const NodeCache = require("node-cache");
 const myCache = new NodeCache();
 
