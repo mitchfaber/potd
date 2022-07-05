@@ -7,7 +7,7 @@ export default function DatePicker({ setSpotDate }) {
 
 	useEffect(() => {
 		setLoading(true);
-		fetch(`http://localhost:8080/dateLimits/`)
+		fetch(`http://localhost:3000/api/dateLimits/`)
 			.then((res) => res.json())
 			.then((result) => {
 				setMaxDate(formatDate(result[0].max));

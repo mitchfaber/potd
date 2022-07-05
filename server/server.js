@@ -27,7 +27,7 @@ app.use(express.json());
 const potdRouter = require("./routes/PokeOfTheDayRoute");
 app.use("/api/", potdRouter);
 
-app.listen(8080, () => {
+app.listen(3000, () => {
 	const job = scheduler.scheduleJob(rule, function () {
 		//run at midnight every day
 		randomNum().then((result) => {
