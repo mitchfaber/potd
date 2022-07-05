@@ -8,7 +8,7 @@ export default function Pokemon({ spotlightDate, today }) {
 
 	useEffect(() => {
 		setLoading(true);
-		fetch(`http://localhost:8080/spotlight/${spotlightDate}`)
+		fetch(`http://localhost:3000/api/spotlight/${spotlightDate}`)
 			.then((res) => res.json())
 			.then((result) => {
 				setPokemon(result);
