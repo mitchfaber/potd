@@ -7,11 +7,12 @@ export default function DatePicker({ setSpotDate }) {
 
 	useEffect(() => {
 		setLoading(true);
-		fetch(`http://localhost:3000/api/dateLimits/`)
+		fetch(`https://api.pokemon.***REMOVED***/dateLimits/`)
 			.then((res) => res.json())
 			.then((result) => {
 				setMaxDate(formatDate(result[0].max));
 				setMinDate(formatDate(result[0].min));
+				setSpotDate(maxDate);
 			});
 	}, []);
 
