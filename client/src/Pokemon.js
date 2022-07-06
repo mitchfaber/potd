@@ -8,7 +8,7 @@ export default function Pokemon({ spotlightDate, today }) {
 
 	useEffect(() => {
 		setLoading(true);
-		fetch(`http://localhost:3000/api/spotlight/${spotlightDate}`)
+		fetch(`https://api.pokemon.***REMOVED***/spotlight/${spotlightDate}`)
 			.then((res) => res.json())
 			.then((result) => {
 				setPokemon(result);
@@ -36,7 +36,7 @@ export default function Pokemon({ spotlightDate, today }) {
 						<div className="row justify-content-start">
 							{pokemon.general.types.map((element) => {
 								return (
-									<div key={uuidv4()} className="col-4 col-sm-2 pb-2">
+									<div key={uuidv4()} className="col-4 col-sm-3 pb-2">
 										<span className={element.type.name}>{capitalize(element.type.name)}</span>
 									</div>
 								);
