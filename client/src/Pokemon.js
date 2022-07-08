@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import FlavorText from "./FlavorText";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { fas } from "@fortawesome/free-solid-svg-icons";
 
 export default function Pokemon({ spotlightDate, today }) {
 	const [pokemon, setPokemon] = useState();
 	const [loading, setLoading] = useState(true);
+	library.add(fas);
 
 	useEffect(() => {
 		setLoading(true);
-		fetch(`https://api.pokemon.***REMOVED***/spotlight/${spotlightDate}`)
+		fetch(`${process.env.REACT_APP_SERVER_ADDR}/spotlight/${spotlightDate}`)
 			.then((res) => res.json())
 			.then((result) => {
 				setPokemon(result);

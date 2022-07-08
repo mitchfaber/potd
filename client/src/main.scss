@@ -16,67 +16,75 @@ body {
 }
 .normal{
     @extend .type;
-    background-color:darkgrey
+    background-color:#A8A77A
 }
 .dark{
     @extend .type;
-    background-color:grey;
+    background-color:#705746;
     color:white
 }
 .grass{
     @extend .type;
-    background-color:green;
+    background-color:#7AC74C;
 }
 .poison {
     @extend .type;
-    background-color:magenta;
+    background-color:#A33EA1;
 }
 .flying{
     @extend .type;
-    background-color:skyblue;
+    background-color:#A98FF3;
 }
 .fire{
     @extend .type;
-    background-color:orangered;
+    background-color:#EE8130;
 }
 .dragon{
     @extend .type;
-    background-color:purple;
+    background-color:#6F35FC;
     color:white
 }
 .ice{
     @extend .type;
-    background-color:#C8E9E9;
+    background-color:#96D9D6;
 }
 .ghost{
     @extend .type;
-    background-color:blueviolet;
+    background-color:#735797;
 }
 .water{
     @extend .type;
-    background-color:aqua;
+    background-color:#6390F0;
 }
 .bug {
     @extend .type;
-    background-color:greenyellow;
+    background-color:#A6B91A;
 }
 .rock{
     @extend .type;
-    background-color:#694605;
+    background-color:#B6A136;
 }
 .electric{
     @extend .type;
-    background-color:yellow;
+    background-color:#F7D02C;
 }
 .steel{
     @extend .type;
-    background-color: #71797E;
+    background-color: #B7B7CE;
 }
 .psychic{
     @extend .type;
-    background-color: darkviolet;
+    background-color: #F95587;
 }
 .fairy{
     @extend .type;
-    background-color: pink;
+    background-color: #D685AD;
+}
+.fighting {
+    @extend .type;
+    background-color: #C22E28;
+}
+.ground {
+    @extend .type;
+    background-color: #E2BF65;
 }

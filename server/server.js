@@ -9,11 +9,7 @@ const myCache = new NodeCache();
 // Schedule task
 const scheduler = require("node-schedule");
 const rule = new scheduler.RecurrenceRule();
-rule.hour = 0;
-rule.minute = 0;
-rule.second = 0;
-//make timezone halifax - might change this to be montreal eventually..
-rule.tz = "America/Halifax";
+rule.minute = 16;
 
 let today = new Date();
 let dd = String(today.getDate()).padStart(2, "0");
@@ -25,17 +21,20 @@ app.use(cors());
 app.use(express.json());
 
 const potdRouter = require("./routes/PokeOfTheDayRoute");
-app.use("/api/", potdRouter);
+app.use("/", potdRouter);
 
 app.listen(3000, () => {
 	const job = scheduler.scheduleJob(rule, function () {
 		//run at midnight every day
-		randomNum().then((result) => {
-			getFromAPI(result, today).then((e) => {
-				//get new pokemon from the api, and write it to my SQL server and write a cache.
-				sqlUtil.setPotdSql(e.name, e.id, today);
-				console.log("Midnight");
-			});
+		sqlUtil.getPotdSql(today).then((res) => {
+			if (res.length === 0) {
+				randomNum().then((result) => {
+					getFromAPI(result, today).then((e) => {
+						//get new pokemon from the api, and write it to my SQL server and write a cache.
+						sqlUtil.setPotdSql(e.name, e.id, today);
+					});
+				});
+			}
 		});
 	});
 
