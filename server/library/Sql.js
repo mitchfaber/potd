@@ -13,12 +13,14 @@ module.exports.getPotdSql = async function getPotdSql(today) {
 			if (err) {
 				handleDisconnect();
 			}
-			let sql = `SELECT * FROM PokemonOfTheDay WHERE Date = ?`;
+			let sql = `SELECT * FROM pokemonoftheday WHERE Date = ?`;
 			con.query(sql, [today], (err, result) => {
 				if (err) {
 					handleDisconnect();
 				}
-				resolve(result);
+				if (result != undefined) {
+					resolve(result);
+				}
 			});
 		});
 
@@ -51,7 +53,7 @@ module.exports.setPotdSql = async function setPotdSql(pokeName, pokeID, today) {
 		if (err) {
 			handleDisconnect();
 		}
-		let sql = "INSERT INTO PokemonOfTheDay (PokemonName, PokedexNum, Date) VALUES (?,?,?)";
+		let sql = "INSERT INTO pokemonoftheday (PokemonName, PokedexNum, Date) VALUES (?,?,?)";
 		con.query(sql, [pokeName, pokeID, today], (err, result) => {
 			if (err) {
 				handleDisconnect();
@@ -82,7 +84,7 @@ module.exports.getMinMaxDates = function getMinMaxDates() {
 			if (err) {
 				handleDisconnect();
 			}
-			let sql = "SELECT MAX(Date) as max,Min(DATE) as min FROM PokemonOfTheDay";
+			let sql = "SELECT MAX(Date) as max,Min(DATE) as min FROM pokemonoftheday";
 			con.query(sql, (err, result) => {
 				if (err) {
 					handleDisconnect();
@@ -120,11 +122,11 @@ function handleDisconnect() {
 		}
 	});
 	con.on("error", function (err) {
-		if (err.code === "PROTOCOL_CONNECTION_LOST") {
-			// Connection to the sql server is usually lost due to either server restart
-			handleDisconnect();
-		} else {
-			throw err;
-		}
+		// if (err.code === "PROTOCOL_CONNECTION_LOST") {
+		// Connection to the sql server is usually lost due to either server restart
+		handleDisconnect();
+		// } else {
+		// 	throw err;
+		// }
 	});
 }
