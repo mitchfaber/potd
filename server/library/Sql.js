@@ -1,5 +1,10 @@
 const mysql = require("mysql");
 
+/**
+ *
+ * @param {date} today date to use to check SQL for pokemon
+ * @returns {Promise<JSON>} Resolves and returns JSON Object from SQL.
+ */
 module.exports.getPotdSql = async function getPotdSql(today) {
 	let con = mysql.createConnection({
 		host: process.env.url,
@@ -40,6 +45,12 @@ module.exports.getPotdSql = async function getPotdSql(today) {
 	});
 };
 
+/**
+ *
+ * @param {string} pokeName pokemon name
+ * @param {int} pokeID pokemon API ID.
+ * @param {string} today formatted date
+ */
 module.exports.setPotdSql = async function setPotdSql(pokeName, pokeID, today) {
 	let con = mysql.createConnection({
 		host: process.env.url,
@@ -71,6 +82,10 @@ module.exports.setPotdSql = async function setPotdSql(pokeName, pokeID, today) {
 	});
 };
 
+/**
+ * Selects min and max dates from SQL for datePicker component.
+ * @returns {Promise<JSON>} JSON containing Max/Min dates.
+ */
 module.exports.getMinMaxDates = function getMinMaxDates() {
 	let con = mysql.createConnection({
 		host: process.env.url,
@@ -104,6 +119,9 @@ module.exports.getMinMaxDates = function getMinMaxDates() {
 	});
 };
 
+/**
+ * HandleDisconnect is to handle SQL timing out and cutting the connection.
+ */
 function handleDisconnect() {
 	con = mysql.createConnection({
 		host: process.env.url,

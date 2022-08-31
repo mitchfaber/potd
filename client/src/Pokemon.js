@@ -4,6 +4,7 @@ import FlavorText from "./FlavorText";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
+import Sprite from "./Sprite";
 
 export default function Pokemon({ spotlightDate, today }) {
 	const [pokemon, setPokemon] = useState();
@@ -47,10 +48,10 @@ export default function Pokemon({ spotlightDate, today }) {
 							})}
 						</div>
 						<div className="row justify-content-center align-items-center">
-							<img
-								src={`${pokemon.general.sprites.other["official-artwork"].front_default}`}
-								className="img-fluid"
-								alt={pokemon.general.name}></img>
+							<Sprite
+								spriteSrc={pokemon.general.sprites.other["official-artwork"].front_default}
+								pokeName={pokemon.general.name}
+							/>
 						</div>
 						<hr />
 						<div className="row justify-content-start">

@@ -38,6 +38,12 @@ router.get("/spotlight/:date", (req, res) => {
 });
 
 // functions
+/**
+ *  @param {int} [pokeID] Pokemon ID number for API
+ *  @param {string} [today] Date to pick new pokemon for. Used to write cache.
+ *
+ *  @return {Promise<json>} Writes cache, resolves when that's done and returns the cached JSON.
+ */
 function getFromAPI(pokeID, today) {
 	return new Promise((resolve) => {
 		let flavorTexts = [];
@@ -73,6 +79,12 @@ function getFromAPI(pokeID, today) {
 	});
 }
 
+/**
+ *
+ * @param {json} data data to be cached
+ * @param {string} today date to be used as key for the cache
+ * @returns {Promise<JSON>} returns the cached JSON.
+ */
 function writeCache(data, today) {
 	return new Promise((resolve) => {
 		myCache.set(today, data, 86400);
@@ -80,6 +92,11 @@ function writeCache(data, today) {
 	});
 }
 
+/**
+ *
+ * @param {string} today date to get cache for
+ * @returns {Promise<JSON>} returns the cached JSON.
+ */
 function getCache(today) {
 	return new Promise((resolve) => {
 		resolve(myCache.get(today));
